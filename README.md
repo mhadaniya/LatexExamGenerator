@@ -30,11 +30,37 @@ template/Makefile # Ferramenta de ajuda na compilação do exam.text
 template/question.X/exercise.0.tex # Cada questão da prova
 ```
 
-# Como gerar o diretório build?
-Para gerar o diretório build basta executar o comando:
+# Requisitos
+O projeto usa **Python 3.13** gerenciado pelo [uv](https://docs.astral.sh/uv/). Há duas formas de rodar:
+
+- **Docker (recomendado):** a imagem já traz Python, as dependências e o TeX Live (xelatex, `exam`, `minted`, babel pt-BR). Não é preciso instalar nada além do Docker.
+- **Local:** requer `uv` e, para compilar os PDFs, uma instalação do TeX Live com `xelatex`, `make` e `zip`.
+
+# Como gerar as provas com Docker
+Construa a imagem uma vez, na raiz do projeto:
+```sh
+docker build -t latex-exam-generator .
+```
+
+Depois rode a partir do diretório que contém o template da prova (`exam.tex`, `alunos.txt`, `question.N/`):
 ```sh
 cd template
-python2 ../main.py
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/prova:Z" latex-exam-generator
+```
+
+Esse comando gera o diretório `build/`, compila os PDFs e cria `build/provas.zip`. Para executar só uma etapa, passe `gerar` ou `compilar` no final do comando:
+```sh
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/prova:Z" latex-exam-generator gerar
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/prova:Z" latex-exam-generator compilar
+```
+
+O `--user` faz os arquivos gerados pertencerem ao seu usuário; o sufixo `:Z` só é necessário em sistemas com SELinux (Fedora, RHEL).
+
+# Como gerar o diretório build localmente
+```sh
+uv sync
+cd template
+uv run --project .. python ../main.py
 ```
 
 Ou seja, executar o programa main.py dentro do diretório template.

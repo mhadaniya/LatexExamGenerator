@@ -1,0 +1,13 @@
+[project]
+name = "latex-exam-generator"
+version = "0.2.0"
+description = "Gera provas LaTeX individuais por aluno, com questões e alternativas embaralhadas e gabarito por prova."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "pycryptodome>=3.20",
+    "qrcode[pil]>=8.0",
+    # Usado pelo pacote LaTeX minted (pygmentize) na compilação dos PDFs
+    "pygments>=2.18",
+]

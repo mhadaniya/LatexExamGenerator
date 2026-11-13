@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 __author__ = 'marc'
 
@@ -56,28 +56,28 @@ def adicionarArquivos(diretorioAtual, resultado):
             resultado[diretorioAtual] = novoNo
             for novoDir in dirnames:
                 if 'question' in (dirpath + '/' + novoDir):
-                    print 'Adicionando:' + dirpath +'/'+ novoDir
-                    # print '/.' in novoNo.diretorioAtual
+                    print('Adicionando:' + dirpath +'/'+ novoDir)
+                    # print('/.' in novoNo.diretorioAtual)
                     adicionarArquivos(novoDir, resultado)
         else:
-            print 'Diretório já adicionado'
+            print('Diretório já adicionado')
             return
 
     return resultado
 
 if __name__ == "__main__":
     currentWorkDirectory = os.getcwd()
-    print 'Diretório atual: ' + currentWorkDirectory
+    print('Diretório atual: ' + currentWorkDirectory)
 
     """ Testando funcionalidade - Adicionar Arquivos """
     estrutura = dict()
     adicionarArquivos(currentWorkDirectory, estrutura)
 
     # PARA DEBUGAR OS DIRETORIOS
-    # for i in estrutura.viewvalues():
-    #     print 'Diretorio:' + i.diretorioAtual
-    #     print 'Diretorios contidos:' + str(i.diretorios)
-    #     print '/.' in i.diretorioAtual
+    # for i in estrutura.values():
+    #     print('Diretorio:' + i.diretorioAtual)
+    #     print('Diretorios contidos:' + str(i.diretorios))
+    #     print('/.' in i.diretorioAtual)
     # PARA DEBUGAR OS DIRETORIOS
 
     """ Criando o shuffle nos exercícios
@@ -93,28 +93,28 @@ if __name__ == "__main__":
     qtdTemplates = 10
 
     #Localizar apenas o SHUFFLE dentro do diretorio question
-    for e in estrutura.viewvalues():
+    for e in estrutura.values():
         if 'question' in e.diretorioAtual and 'SHUFFLE' in os.listdir(e.diretorioAtual):
-            print 'Encontrou SHUFFLE no dir:' + e.diretorioAtual
+            print('Encontrou SHUFFLE no dir:' + e.diretorioAtual)
             contador = 0
             for arquivo in e.arquivos:
                 if 'exercise' in str(arquivo) and not '~' in str(arquivo):
-                    print arquivo
+                    print(arquivo)
                     contador = contador + 1
 
-            print 'Quantidade de arquivos: ' + str(contador)
+            print('Quantidade de arquivos: ' + str(contador))
 
             for arquivo in e.arquivos:
                 if 'exercise' in str(arquivo) and not '~' in str(arquivo):
-                    print e.diretorioAtual + arquivo
-                    with open(e.diretorioAtual+arquivo,'r') as fileOpened:
+                    print(e.diretorioAtual + arquivo)
+                    with open(e.diretorioAtual+arquivo, 'r', encoding='utf-8') as fileOpened:
                         ch = fileOpened.read()
                     fileOpened.close()
-                    #print file.readlines()
+                    #print(file.readlines())
                     regex = re.compile(r'begin(.*)end', re.DOTALL)
                     match = regex.findall(ch)
                     if match:
-                        # print match[0]
+                        # print(match[0])
                         regex = re.compile((r'(\\item.*)'))
                         items = regex.findall(match[0])
                         if items:
@@ -124,9 +124,9 @@ if __name__ == "__main__":
                                 # gerando o gabarito para provas objetivas
                                 for idx, item in enumerate(novaLista):
                                     if '%verdadeiro' in item:
-                                        print idx
-                                        print item
-                                novoArquivo = open(e.diretorioAtual+'exercise.'+str(i+1)+'.tex', 'w')
+                                        print(idx)
+                                        print(item)
+                                novoArquivo = open(e.diretorioAtual+'exercise.'+str(i+1)+'.tex', 'w', encoding='utf-8')
                                 regex = re.compile(r'(.*\\begin\{choices\}\n)', re.DOTALL)
                                 match = regex.findall(ch)
                                 for linha in match:
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     # img = qrcode.make('http://professor.local:8080/ALGUMACOISAAQUIDENTRO/', image_factory=PilImage)
     # img.save('/tmp/output.png')
 
-    arquivoAlunos = open('alunos.txt', 'r')
+    arquivoAlunos = open('alunos.txt', 'r', encoding='utf-8')
     relacaoAlunos = arquivoAlunos.readlines()
     arquivoAlunos.close()
     alunos = [line.strip() for line in relacaoAlunos]
@@ -160,13 +160,13 @@ if __name__ == "__main__":
         shutil.rmtree(buildDir)
 
     if buildDir not in os.listdir(currentWorkDirectory):
-        print 'NAO EXISTE O DIRETORIO'
+        print('NAO EXISTE O DIRETORIO')
         os.mkdir(buildDir)
-        print 'Copiando script.sh para raiz do ' + buildDir + ':'
+        print('Copiando script.sh para raiz do ' + buildDir + ':')
         shutil.copy(diretorioPython + '/' + 'script.sh', buildDir + '/' + 'script.sh')
 
     for idxAluno, aluno in enumerate(alunos):
-        print aluno
+        print(aluno)
 
         """ Arquivo de assinatura """
         """ Nome do aluno: """
@@ -185,9 +185,9 @@ if __name__ == "__main__":
             if (profundidade>0):
                 break
 
-        print todasQuestoes
+        print(todasQuestoes)
 
-        with open('exam.tex', 'r') as fileOpened:
+        with open('exam.tex', 'r', encoding='utf-8') as fileOpened:
             ch = fileOpened.read()
         fileOpened.close()
 
@@ -199,7 +199,7 @@ if __name__ == "__main__":
         match = regex.findall(ch)
         # for result in match:
         #     chBuild = ch[:]
-        #     print result
+        #     print(result)
         #     regex = re.compile(result)
         #     match = regex.findall(ch)
 
@@ -212,62 +212,62 @@ if __name__ == "__main__":
         nomeDiretorioAluno = templateFilenameDirectory
         nomeArquivoAluno = nomeDiretorioAluno + '/' + templateFilenameDirectory + ".tex"
         if nomeDiretorioAluno not in os.listdir(buildDir):
-            print os.listdir(buildDir)
-            print 'Não existe o diretório do aluno: ' + nomeDiretorioAluno
+            print(os.listdir(buildDir))
+            print('Não existe o diretório do aluno: ' + nomeDiretorioAluno)
             os.mkdir(buildDir + '/' + nomeDiretorioAluno)
 
         for idx, questao in enumerate(match):
-            print 'idx = ' + str(idx)
-            print questoes[idx]
-            print 'Arquivos: ' + str((estrutura[questoes[idx]]).exercicios)
+            print('idx = ' + str(idx))
+            print(questoes[idx])
+            print('Arquivos: ' + str((estrutura[questoes[idx]]).exercicios))
             qtdeExercicios = len(estrutura[questoes[idx]].exercicios)
             if qtdeExercicios > 1:
                 idxExercise = randrange(1, qtdeExercicios)
-                print 'Vai tentar abrir o arquivo: ' + str(estrutura[questoes[idx]].diretorioAtual) + str(estrutura[questoes[idx]].exercicios[idxExercise])
-                with open(str(estrutura[questoes[idx]].diretorioAtual) + str(estrutura[questoes[idx]].exercicios[idxExercise]), 'r') as exerciseFile:
+                print('Vai tentar abrir o arquivo: ' + str(estrutura[questoes[idx]].diretorioAtual) + str(estrutura[questoes[idx]].exercicios[idxExercise]))
+                with open(str(estrutura[questoes[idx]].diretorioAtual) + str(estrutura[questoes[idx]].exercicios[idxExercise]), 'r', encoding='utf-8') as exerciseFile:
                         exerciseContent = exerciseFile.read()
                 exerciseFile.close()
                 regex = re.compile((r'(\\item.*)'))
                 items = regex.findall(exerciseContent)
                 # if items:
-                #     print 'Itens: ' + items
+                #     print('Itens: ' + items)
                 for idxAnswer, item in enumerate(items):
                     if '%verdadeiro' in item:
-                        assinatura = assinatura + str(idx+1) + ': GABARITO: ' + char(idxAnswer+65) + '\n'
+                        assinatura = assinatura + str(idx+1) + ': GABARITO: ' + chr(idxAnswer+65) + '\n'
                         assinatura = assinatura + '\tQuestão trocada: ' + questao + '\n'
                         assinatura = assinatura + '\tQuestao escolhida: ' + str(estrutura[questoes[idx]].diretorioAtual) + str(estrutura[questoes[idx]].exercicios[idxExercise]) + '\n'
             else:
                 idxExercise = 0
             arquivoOrigemExercicio = str(estrutura[questoes[idx]].diretorioAtual) + str(estrutura[questoes[idx]].exercicios[idxExercise])
-            print 'Questao escolhida: ' + arquivoOrigemExercicio
+            print('Questao escolhida: ' + arquivoOrigemExercicio)
             novoExercicio = str(estrutura[questoes[idx]].diretorioAtual) + str(estrutura[questoes[idx]].exercicios[idxExercise])[:-4]
-            print 'Questão a ser substituida: ' + questao
-            print 'Nova questão: ' + novoExercicio
+            print('Questão a ser substituida: ' + questao)
+            print('Nova questão: ' + novoExercicio)
             novaQuestao = re.sub(questao, novoExercicio, novaQuestao)
             """ Copiar arquivos escolhidos """
             diretorioDestinoExercicio = buildDir + '/' + nomeDiretorioAluno + '/' + str(estrutura[questoes[idx]].diretorioAtual)[:-1]
             os.mkdir(diretorioDestinoExercicio)
             shutil.copy(arquivoOrigemExercicio, diretorioDestinoExercicio + '/' + str(estrutura[questoes[idx]].exercicios[idxExercise]))
-            print "Diretorio de exercicio a ser criado: " + str(estrutura[questoes[idx]].diretorioAtual)[:-1]
+            print("Diretorio de exercicio a ser criado: " + str(estrutura[questoes[idx]].diretorioAtual)[:-1])
 
 
         """ Mudar o nome do aluno no arquivo tex """
         novaQuestao = re.sub(r'Nome:\\hfill', 'Nome: ' + str("%02d" % (idxAluno+1)) + ' - ' + aluno, novaQuestao)
 
-        arquivoAluno = open(buildDir + '/' + nomeArquivoAluno, 'w')
+        arquivoAluno = open(buildDir + '/' + nomeArquivoAluno, 'w', encoding='utf-8')
         arquivoAluno.write(novaQuestao)
         arquivoAluno.close()
 
-        arquivoAssinatura = open(buildDir + '/' + nomeDiretorioAluno + '/' + 'assinatura', 'w')
+        arquivoAssinatura = open(buildDir + '/' + nomeDiretorioAluno + '/' + 'assinatura', 'w', encoding='utf-8')
         arquivoAssinatura.write(assinatura)
         arquivoAssinatura.close()
 
         """ Copiando arquivo Makefile por aluno """
-        with open('Makefile', 'r') as makefile:
+        with open('Makefile', 'r', encoding='utf-8') as makefile:
             contentMakefile = makefile.read()
         makefile.close()
         contentMakefile = re.sub('exam.tex', templateFilenameDirectory + ".tex", contentMakefile)
-        with open(buildDir + '/' + nomeDiretorioAluno + '/' + 'Makefile', 'w') as makefile:
+        with open(buildDir + '/' + nomeDiretorioAluno + '/' + 'Makefile', 'w', encoding='utf-8') as makefile:
             makefile.write(contentMakefile)
         makefile.close()
 
@@ -277,14 +277,14 @@ if __name__ == "__main__":
                 shutil.rmtree(buildDir + '/' + nomeDiretorioAluno + '/' + 'figuras')
             shutil.copytree('figuras', buildDir + '/' + nomeDiretorioAluno + '/' + 'figuras')
         else:
-            print 'Não foi possível encontrar o diretório figuras/'
+            print('Não foi possível encontrar o diretório figuras/')
 
         """ Gerando QR Codes """
-        with open(buildDir + '/' + nomeDiretorioAluno + '/' + 'assinatura', 'r') as arquivoAssinatura:
+        with open(buildDir + '/' + nomeDiretorioAluno + '/' + 'assinatura', 'r', encoding='utf-8') as arquivoAssinatura:
             content = arquivoAssinatura.read()
         arquivoAssinatura.close()
-        #print binascii.hexlify(content)
-        #print binascii.unhexlify(binascii.hexlify(content))
+        #print(binascii.hexlify(content))
+        #print(binascii.unhexlify(binascii.hexlify(content)))
 
         #img = qrcode.make('http://192.168.0.12:8080/' + binascii.hexlify(content) + '/', image_factory=PilImage)
         #img.save(buildDir + '/' + nomeDiretorioAluno + '/' + 'figuras/qrcode.png')

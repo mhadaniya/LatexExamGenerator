@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __builtin__ import object
 
 __author__ = 'marc'
 
