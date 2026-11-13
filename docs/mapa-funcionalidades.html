@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa de Funcionalidades</title>
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --surface-2: #f0eee8;
+    --text: #1d1d1b;
+    --muted: #5c5a55;
+    --border: #dedbd2;
+    --accent: #2f5d8a;
+    --accent-soft: #e3ecf5;
+    --ok: #2e6b3f;
+    --ok-soft: #e2f0e5;
+    --warn: #8a5a00;
+    --warn-soft: #fbf0d9;
+    --bad: #9b2c2c;
+    --bad-soft: #f8e3e3;
+    --code-bg: #efede7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161616;
+      --surface: #1f1f1f;
+      --surface-2: #262626;
+      --text: #ecebe7;
+      --muted: #a8a59e;
+      --border: #3a3936;
+      --accent: #8db8e3;
+      --accent-soft: #1f2d3b;
+      --ok: #8fd19e;
+      --ok-soft: #1c2c20;
+      --warn: #e8c068;
+      --warn-soft: #33290f;
+      --bad: #f0a0a0;
+      --bad-soft: #3a1d1d;
+      --code-bg: #2a2a2a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161616; --surface: #1f1f1f; --surface-2: #262626; --text: #ecebe7;
+    --muted: #a8a59e; --border: #3a3936; --accent: #8db8e3; --accent-soft: #1f2d3b;
+    --ok: #8fd19e; --ok-soft: #1c2c20; --warn: #e8c068; --warn-soft: #33290f;
+    --bad: #f0a0a0; --bad-soft: #3a1d1d; --code-bg: #2a2a2a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 980px; margin: 0 auto; padding: 40px 16px 80px; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 1.35rem; margin: 48px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 1.05rem; margin: 0 0 6px; }
+  p { margin: 0 0 12px; }
+  .lead { color: var(--muted); font-size: 1.05rem; max-width: 70ch; }
+  code {
+    font: 0.88em/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    background: var(--code-bg); padding: 1px 5px; border-radius: 4px;
+  }
+  pre {
+    background: var(--code-bg); padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font: 0.85rem/1.5 ui-monospace, Menlo, Consolas, monospace; margin: 0 0 12px;
+  }
+  pre code { background: none; padding: 0; }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; }
+  nav.toc a {
+    text-decoration: none; color: var(--accent); background: var(--accent-soft);
+    padding: 4px 12px; border-radius: 999px; font-size: 0.9rem;
+  }
+
+  /* Pipeline */
+  .pipeline { display: grid; gap: 0; }
+  .step {
+    display: grid; grid-template-columns: 44px 1fr; gap: 14px;
+    position: relative; padding-bottom: 18px;
+  }
+  .step:not(:last-child)::before {
+    content: ""; position: absolute; left: 21px; top: 44px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .step .n {
+    width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--accent); color: var(--bg); font-weight: 700;
+  }
+  .step .body {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px;
+  }
+  .step .body p { margin: 0; color: var(--muted); }
+  .step .who { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+
+  /* Cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .card p { color: var(--muted); margin: 0; }
+  .card .ref { font-size: 0.82rem; color: var(--muted); margin-top: auto; padding-top: 8px; }
+  .tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 2px 8px; border-radius: 999px;
+    letter-spacing: .03em; align-self: flex-start;
+  }
+  .tag.ok { background: var(--ok-soft); color: var(--ok); }
+  .tag.warn { background: var(--warn-soft); color: var(--warn); }
+  .tag.bad { background: var(--bad-soft); color: var(--bad); }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--surface-2); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+
+  .callout {
+    border-left: 4px solid var(--bad); background: var(--bad-soft);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 0 0 12px;
+  }
+  .callout.warn { border-color: var(--warn); background: var(--warn-soft); }
+  .callout strong { color: var(--text); }
+  ul { padding-left: 1.2em; margin: 0 0 12px; }
+  li { margin-bottom: 4px; }
+  footer { margin-top: 56px; color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>LatexExamGenerator — mapa de funcionalidades</h1>
+  <p class="lead">
+    Ferramenta em Python 3.13 (gerenciada com uv, com imagem Docker) que pega um banco de questões em LaTeX (classe <code>exam</code>) e gera
+    uma prova diferente para cada aluno: ordem de questões embaralhada, variante sorteada de cada questão,
+    alternativas embaralhadas e um gabarito individual (<code>assinatura</code>) por prova.
+  </p>
+  <nav class="toc">
+    <a href="#fluxo">Fluxo</a>
+    <a href="#funcionalidades">Funcionalidades</a>
+    <a href="#entradas">Entradas</a>
+    <a href="#saidas">Saídas</a>
+    <a href="#codigo">Código</a>
+    <a href="#inativas">Não utilizadas</a>
+    <a href="#problemas">Problemas</a>
+    <a href="#requisitos">Requisitos</a>
+  </nav>
+</header>
+
+<section id="fluxo">
+  <h2>Fluxo de ponta a ponta</h2>
+  <div class="pipeline">
+    <div class="step"><div class="n">1</div><div class="body">
+      <div class="who">Professor</div>
+      <h3>Prepara o template</h3>
+      <p>Edita <code>exam.tex</code> (folha de rosto), cria os diretórios <code>question.N/</code> com
+      <code>exercise.0.tex</code>, marca a alternativa correta com <code>%verdadeiro</code> e lista os alunos em <code>alunos.txt</code>.</p>
+    </div></div>
+    <div class="step"><div class="n">2</div><div class="body">
+      <div class="who">main.py</div>
+      <h3>Varre a estrutura de diretórios</h3>
+      <p><code>adicionarArquivos()</code> percorre o diretório atual e monta um dicionário de
+      <code>EstruturaArquivos</code> com os diretórios <code>question*</code> e seus arquivos <code>exercise*</code>.</p>
+    </div></div>
+    <div class="step"><div class="n">3</div><div class="body">
+      <div class="who">main.py</div>
+      <h3>Gera variantes de alternativas (SHUFFLE)</h3>
+      <p>Em cada <code>question.N/</code> que contém o arquivo <code>SHUFFLE</code>, cria
+      <code>exercise.1.tex</code> … <code>exercise.10.tex</code> com os <code>\item</code> do bloco
+      <code>choices</code> em ordem aleatória.</p>
+    </div></div>
+    <div class="step"><div class="n">4</div><div class="body">
+      <div class="who">main.py — para cada aluno</div>
+      <h3>Monta a prova individual</h3>
+      <p>Embaralha a ordem das questões, sorteia uma variante de cada uma, reescreve os <code>\input{}</code>
+      do <code>exam.tex</code>, insere número e nome do aluno, copia exercícios, <code>Makefile</code> e <code>figuras/</code>
+      e grava o gabarito em <code>assinatura</code>.</p>
+    </div></div>
+    <div class="step"><div class="n">5</div><div class="body">
+      <div class="who">build/script.sh</div>
+      <h3>Compila e empacota</h3>
+      <p>Roda <code>make</code> (xelatex) duas vezes em cada pasta de aluno, move os PDFs para
+      <code>build/</code> e gera <code>provas.zip</code>.</p>
+    </div></div>
+    <div class="step"><div class="n">6</div><div class="body">
+      <div class="who">Professor</div>
+      <h3>Aplica e corrige</h3>
+      <p>Imprime as provas e corrige cada uma usando o arquivo <code>assinatura</code> da pasta do aluno.</p>
+    </div></div>
+  </div>
+
+  <pre><code>docker build -t latex-exam-generator .
+cd template
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/prova:Z" latex-exam-generator</code></pre>
+</section>
+
+<section id="funcionalidades">
+  <h2>Funcionalidades</h2>
+  <div class="grid">
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Descoberta do banco de questões</h3>
+      <p>Encontra recursivamente os diretórios <code>question*</code> e os arquivos <code>exercise*</code>
+      (ignorando backups com <code>~</code>).</p>
+      <div class="ref"><code>main.py:52</code> · <code>dominio/EstruturaArquivos.py</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Embaralhamento de alternativas</h3>
+      <p>Ativado por um arquivo vazio <code>SHUFFLE</code> na pasta da questão. Gera 10 variantes
+      (<code>qtdTemplates</code>) com as alternativas reordenadas a partir do bloco
+      <code>\begin{choices}…\end{choices}</code>.</p>
+      <div class="ref"><code>main.py:93–140</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Embaralhamento da ordem das questões</h3>
+      <p>A lista de diretórios <code>question*</code> é embaralhada por aluno e mapeada nos
+      <code>\input{question.N/exercise.0.tex}</code> do <code>exam.tex</code>.</p>
+      <div class="ref"><code>main.py:195–196</code>, <code>main.py:216–251</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Sorteio de variante por questão</h3>
+      <p>Para cada questão com mais de um exercício, sorteia uma das variantes geradas
+      (<code>randrange(1, n)</code>).</p>
+      <div class="ref"><code>main.py:223–227</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Prova personalizada por aluno</h3>
+      <p>Cria <code>build/NN_NOME_DO_ALUNO/</code> com o <code>.tex</code> próprio e substitui
+      <code>Nome:\hfill</code> por <code>Nome: NN - Nome do aluno</code>.</p>
+      <div class="ref"><code>main.py:203–208</code>, <code>main.py:255</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Gabarito individual (<code>assinatura</code>)</h3>
+      <p>Registra, para cada posição, a letra da alternativa correta (linha com <code>%verdadeiro</code>),
+      a questão original substituída e a variante escolhida.</p>
+      <div class="ref"><code>main.py:180</code>, <code>main.py:232–238</code>, <code>main.py:261</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Makefile e figuras por aluno</h3>
+      <p>Copia o <code>Makefile</code> trocando <code>exam.tex</code> pelo nome do arquivo do aluno,
+      e replica o diretório <code>figuras/</code> em cada pasta.</p>
+      <div class="ref"><code>main.py:265–280</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Build limpo a cada execução</h3>
+      <p>Apaga <code>build/</code> inteiro, recria e copia <code>script.sh</code> para a raiz dele.</p>
+      <div class="ref"><code>main.py:159–166</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Compilação em lote e ZIP</h3>
+      <p><code>script.sh</code> executa todos os Makefiles duas vezes (para resolver referências do
+      LaTeX como <code>\numpages</code>), junta os PDFs e cria <code>provas.zip</code>.</p>
+      <div class="ref"><code>script.sh</code> · <code>template/Makefile</code></div>
+    </div>
+    <div class="card">
+      <span class="tag ok">Ativa</span>
+      <h3>Folha de rosto padrão</h3>
+      <p><code>exam.tex</code> traz cabeçalho, instruções, tabela de notas (<code>\gradetable</code>),
+      campo de nome/assinatura e suporte a código com <code>minted</code>.</p>
+      <div class="ref"><code>template/exam.tex</code></div>
+    </div>
+  </div>
+</section>
+
+<section id="entradas">
+  <h2>Entradas (diretório <code>template/</code>)</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Arquivo</th><th>Papel</th><th>Convenções exigidas</th></tr></thead>
+      <tbody>
+        <tr><td><code>exam.tex</code></td><td>Folha de rosto e esqueleto da prova</td>
+          <td>Um <code>\input{question.N/exercise.0.tex}</code> por questão; campo <code>\textbf{Nome:\hfill}</code></td></tr>
+        <tr><td><code>alunos.txt</code></td><td>Lista de alunos</td>
+          <td>Um nome por linha; a ordem define o número <code>NN</code> da prova</td></tr>
+        <tr><td><code>question.N/exercise.0.tex</code></td><td>Questão modelo</td>
+          <td><code>\question[pts]</code>, bloco <code>choices</code>, alternativa correta com <code>%verdadeiro</code></td></tr>
+        <tr><td><code>question.N/SHUFFLE</code></td><td>Liga o embaralhamento de alternativas</td>
+          <td>Arquivo vazio; só a presença importa</td></tr>
+        <tr><td><code>Makefile</code></td><td>Compilação</td>
+          <td><code>xelatex -shell-escape exam.tex</code> (o nome é trocado por aluno)</td></tr>
+        <tr><td><code>figuras/</code></td><td>Imagens (logo, QR code)</td>
+          <td>Copiado inteiro para cada aluno</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="saidas">
+  <h2>Saídas (diretório <code>template/build/</code>)</h2>
+  <pre><code>build/
+├── script.sh
+├── provas.zip                      # após rodar script.sh
+├── 01_NOME_COMPLETO_DO_ALUNO_1.pdf # após rodar script.sh
+└── 01_NOME_COMPLETO_DO_ALUNO_1/
+    ├── 01_NOME_COMPLETO_DO_ALUNO_1.tex
+    ├── Makefile
+    ├── assinatura                  # gabarito da prova
+    ├── figuras/
+    └── question.K/exercise.V.tex   # só as variantes sorteadas</code></pre>
+  <p>Exemplo de <code>assinatura</code>:</p>
+  <pre><code>Ordem: 0, Aluno: NOME COMPLETO DO ALUNO 1
+1: GABARITO: C
+	Questão trocada: question.0/exercise.0.tex
+	Questao escolhida: question.2/exercise.7.tex
+...</code></pre>
+  <p style="color:var(--muted)">Os arquivos versionados em <code>template/build/</code> foram gerados antes do último commit
+  e ainda mostram o gabarito como número (<code>GABARITO: 2</code>).</p>
+</section>
+
+<section id="codigo">
+  <h2>Organização do código</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Arquivo</th><th>Conteúdo</th><th>Uso</th></tr></thead>
+      <tbody>
+        <tr><td><code>main.py</code></td><td>Script único com todo o fluxo no bloco <code>__main__</code>, mais funções AES e <code>adicionarArquivos()</code></td><td>Ponto de entrada</td></tr>
+        <tr><td><code>dominio/EstruturaArquivos.py</code></td><td>Nó de diretório: caminho, subdiretórios, arquivos e propriedade <code>exercicios</code></td><td>Usado</td></tr>
+        <tr><td><code>dominio/Questao.py</code></td><td>Classe com lista de exercícios</td><td>Importada, não usada</td></tr>
+        <tr><td><code>dominio/Exercicio.py</code></td><td>Classe vazia (<code>self.data = []</code>)</td><td>Importada, não usada</td></tr>
+        <tr><td><code>script.sh</code></td><td>Compilação em lote + ZIP</td><td>Copiado para <code>build/</code></td></tr>
+        <tr><td><code>template/</code></td><td>Exemplo completo: 10 questões × 11 arquivos, 5 alunos</td><td>Diretório de trabalho</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="inativas">
+  <h2>Funcionalidades iniciadas e não utilizadas</h2>
+  <div class="grid">
+    <div class="card">
+      <span class="tag warn">Inativa</span>
+      <h3>Criptografia AES do gabarito</h3>
+      <p><code>encrypt</code>/<code>decrypt</code>/<code>encrypt_file</code>/<code>decrypt_file</code> (AES-CBC)
+      existem, mas as chamadas estão comentadas. A chave está fixa no código.</p>
+      <div class="ref"><code>main.py:18–49</code>, <code>main.py:145–148</code></div>
+    </div>
+    <div class="card">
+      <span class="tag warn">Inativa</span>
+      <h3>QR code com o gabarito</h3>
+      <p>A ideia era gerar <code>figuras/qrcode.png</code> por aluno com a assinatura em hexadecimal numa URL.
+      Está comentada; o QR usado é estático e o <code>\figuratopo</code> no <code>exam.tex</code> também está comentado.</p>
+      <div class="ref"><code>main.py:150–151</code>, <code>main.py:282–290</code></div>
+    </div>
+    <div class="card">
+      <span class="tag warn">Inativa</span>
+      <h3>Modelo de domínio <code>Questao</code>/<code>Exercicio</code></h3>
+      <p>Classes criadas mas nunca instanciadas; o fluxo trabalha direto com caminhos e strings.</p>
+      <div class="ref"><code>dominio/Questao.py</code>, <code>dominio/Exercicio.py</code></div>
+    </div>
+  </div>
+</section>
+
+<section id="problemas">
+  <h2>Problemas e limitações encontrados</h2>
+  <div class="callout warn">
+    <strong>O SHUFFLE altera o template.</strong> As variantes <code>exercise.1..10.tex</code> são
+    reescritas dentro de <code>template/question.N/</code> a cada execução, não em <code>build/</code>.
+  </div>
+  <ul>
+    <li><strong>Sorteio depende da ordem do sistema de arquivos.</strong> <code>randrange(1, n)</code> exclui o
+      índice 0 e o último da lista retornada por <code>os.walk</code>, que não é ordenada; não há garantia de que
+      <code>exercise.0.tex</code> seja o excluído.</li>
+    <li><strong>Substituição por regex sem escape.</strong> <code>re.sub(questao, …)</code> usa o caminho como padrão
+      (o <code>.</code> vira curinga) e as substituições são encadeadas no mesmo texto.</li>
+    <li><strong>Só questões objetivas entram no gabarito.</strong> Questões sem <code>\item … %verdadeiro</code>
+      não geram linha na assinatura.</li>
+    <li><strong>Número de questões amarrado ao <code>exam.tex</code>.</strong> É preciso haver exatamente um
+      <code>\input</code> por diretório <code>question*</code>.</li>
+    <li><strong>Sem parâmetros de linha de comando.</strong> Quantidade de variantes (10), nomes de arquivos e
+      diretório de saída estão fixos no código.</li>
+    <li><strong>Chave criptográfica no código-fonte</strong> (mesmo sem uso hoje).</li>
+    <li><strong>Sem semente aleatória.</strong> Não dá para reproduzir um mesmo conjunto de provas.</li>
+  </ul>
+</section>
+
+<section id="requisitos">
+  <h2>Requisitos</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Componente</th><th>Detalhe</th></tr></thead>
+      <tbody>
+        <tr><td>Python 3.13 + uv</td><td><code>pyproject.toml</code> / <code>uv.lock</code>: <code>pycryptodome</code>, <code>qrcode[pil]</code> (importados, sem uso efetivo) e <code>pygments</code> (usado pelo <code>minted</code>)</td></tr>
+        <tr><td>Docker</td><td><code>Dockerfile</code> com Python 3.13, uv e TeX Live; <code>docker-entrypoint.sh</code> aceita <code>gerar</code>, <code>compilar</code> ou <code>tudo</code> (padrão), com o template montado em <code>/prova</code></td></tr>
+        <tr><td>LaTeX</td><td><code>xelatex</code> com <code>-shell-escape</code>; pacotes <code>exam</code>, <code>minted</code> (requer Pygments), <code>mdframed</code>, <code>babel</code>, <code>paralist</code>, <code>syntax</code>, <code>mathtools</code></td></tr>
+        <tr><td>Shell</td><td><code>sh</code>/<code>bash</code>, <code>find</code>, <code>make</code>, <code>zip</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>Gerado a partir da leitura do código no commit <code>e3e865e</code> e atualizado após a migração para Python 3.13.</footer>
+
+</main>
+</body>
+</html>
